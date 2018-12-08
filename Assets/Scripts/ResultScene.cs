@@ -24,43 +24,32 @@ public class ResultScene : MonoBehaviour
 
     List<ResultData> resultDatas = null;
 
+    [SerializeField]
+    ResultRankListView resultRankListView;
+
     bool flag;
+
+    private void Awake()
+    {
+        SceneLoader.CurrentOptions = new Options(ResultData.CreateTestModels());
+    }
 
     // Use this for initialization
     void Start()
     {
 
-        ResultData c = new ResultData(0, 0f, 3);
-        ResultData a = new ResultData(1, 0f, 1);
-        ResultData b = new ResultData(0, 0f, 2);
-        ResultData d = new ResultData(1, 0f, 5);
-
-        List<ResultData> z = new List<ResultData>
-        {
-            a,
-            b,
-            c,
-            d
-        };
-
-
-        options = new Options(z);
-        //options = SceneLoader.CurrentOptions as Options;
-
+        options = SceneLoader.CurrentOptions as Options;
         if (options == null)
         {
             Debug.LogError("Score result is null");
-
         }
         flag = true;
+        Debug.Log(options.Results.Count);
 
-        resultDatas = options.Results;
-        resultDatas = resultDatas.OrderBy(value => value.Rank).ToList();
+        resultDatas = options.Results.OrderBy(value => value.Rank).ToList(); ;
 
-        foreach (ResultData result in options.Results)
-        {
-            Debug.Log(result.Rank);
-        }
+        resultRankListView.SetResultRankItem(resultDatas);
+
     }
 
     // Update is called once per frame
