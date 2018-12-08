@@ -9,13 +9,13 @@ public class PlayerScript : MonoBehaviour
         Enum.GetValues(typeof(Joycon.Button)) as Joycon.Button[];
 
     public List<GameObject> player = new List<GameObject>();
+    public List<GameObject> bloom = new List<GameObject>();
     private List<Joycon> m_joycons;
     private Joycon m_joycon1;
     private Joycon m_joycon2;
     private Joycon.Button? m_pressedButtonL; //null 許容型
     private Joycon.Button? m_pressedButtonR;
 
-    public GameObject bloom;
 
     private void Start()
     {
@@ -31,10 +31,10 @@ public class PlayerScript : MonoBehaviour
 
         for (int i = 0; i < m_joycons.Count; i++)
         {
-            Quaternion temp = new Quaternion (m_joycons[i].GetVector().x, -m_joycons[i].GetVector().z, m_joycons[i].GetVector().y, m_joycons[i].GetVector().w);
+            Quaternion temp = new Quaternion(m_joycons[i].GetVector().x, -m_joycons[i].GetVector().z, m_joycons[i].GetVector().y, m_joycons[i].GetVector().w);
             player[i].transform.rotation = temp;
-            
-            player[i].transform.position +=  new Vector3(m_joycons[i].GetStick()[0]/2, m_joycons[i].GetStick()[1]/2, 0);
+
+            player[i].transform.position += new Vector3(m_joycons[i].GetStick()[0] / 2, m_joycons[i].GetStick()[1] / 2, 0);
         }
         m_pressedButtonL = null;
         m_pressedButtonR = null;
@@ -53,11 +53,15 @@ public class PlayerScript : MonoBehaviour
             }
         }
 
-        if(Vector3.Dot(bloom.transform.position, player[0].transform.position) <= 110f)
-        //if(Mathf.Abs(90 - bloom.transform.eulerAngles.x) >= 20 | Mathf.Abs(90 - bloom.transform.eulerAngles.z) >= 20) //| bloom.transform.rotation.z)
+        for (int i = 0; i < bloom.Count; i++)
         {
-            Destroy(bloom.GetComponent<HingeJoint>());
-            Debug.Log("gameOver");
+            //if (Vector3.Dot(bloom[i].transform.position, player[i].transform.position) <= 110f)
+            Debug.Log(Mathf.Abs(90-bloom[i].transform.localEulerAngles.x));
+            if(Mathf.Abs(90 - bloom[i].transform.localEulerAngles.x) >= 20) //| bloom.transform.rotation.z)
+            {
+                Destroy(bloom[i].GetComponent<HingeJoint>());
+                Debug.Log("gameOver");
+            }
         }
 
         //バイブレーション
