@@ -54,7 +54,7 @@ public class PlayerScript : MonoBehaviour
         //if(Vector3.Dot(bloom.transform.position,new Vector3(bloom.transform.position.x, bloom.transform.position.y, transform.position.z) <= 0.5f);
         if(Mathf.Abs(90 - bloom.transform.eulerAngles.x) >= 10 | Mathf.Abs(90 - bloom.transform.eulerAngles.z) >= 10) //| bloom.transform.rotation.z)
         {
-
+            Destroy(bloom.GetComponent<HingeJoint>());
             Debug.Log("gameOver");
         }
 
