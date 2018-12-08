@@ -375,7 +375,7 @@ HingeJoint:
   m_GameObject: {fileID: 443768146}
   m_ConnectedBody: {fileID: 1744166275}
   m_Anchor: {x: 0, y: 1.1, z: 0}
-  m_Axis: {x: 1, y: 0, z: 0}
+  m_Axis: {x: 1, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
   m_ConnectedAnchor: {x: 0, y: -0.15999843, z: 0.00000013836792}
   m_UseSpring: 0
@@ -388,10 +388,10 @@ HingeJoint:
     targetVelocity: 0
     force: 0
     freeSpin: 0
-  m_UseLimits: 1
+  m_UseLimits: 0
   m_Limits:
-    min: 80
-    max: 100
+    min: 0
+    max: 0
     bounciness: 0
     bounceMinVelocity: 0.2
     contactDistance: 0
@@ -427,11 +427,11 @@ HingeJoint:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 450745837}
-  m_ConnectedBody: {fileID: 1744166275}
+  m_ConnectedBody: {fileID: 1495154061}
   m_Anchor: {x: 0, y: 1.1, z: 0}
-  m_Axis: {x: 1, y: 0, z: 0}
+  m_Axis: {x: 1, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 1.875, y: -0.15999843, z: 0.00000013836792}
+  m_ConnectedAnchor: {x: 0, y: -0.15999843, z: 0.00000013836792}
   m_UseSpring: 0
   m_Spring:
     spring: 0
@@ -450,7 +450,7 @@ HingeJoint:
     bounceMinVelocity: 0.2
     contactDistance: 0
   m_BreakForce: Infinity
-  m_BreakTorque: 100
+  m_BreakTorque: Infinity
   m_EnableCollision: 0
   m_EnablePreprocessing: 1
   m_MassScale: 1
@@ -738,7 +738,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 4
   m_CollisionDetection: 0
 --- !u!1 &1923135759
 GameObject:
@@ -809,4 +809,4 @@ MonoBehaviour:
   player:
   - {fileID: 1744166270}
   - {fileID: 1495154056}
-  bloom: {fileID: 450745837}
+  bloom: {fileID: 443768146}

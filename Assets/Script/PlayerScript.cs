@@ -33,6 +33,7 @@ public class PlayerScript : MonoBehaviour
         {
             Quaternion temp = new Quaternion (m_joycons[i].GetVector().x, -m_joycons[i].GetVector().z, m_joycons[i].GetVector().y, m_joycons[i].GetVector().w);
             player[i].transform.rotation = temp;
+            
             player[i].transform.position +=  new Vector3(m_joycons[i].GetStick()[0]/2, m_joycons[i].GetStick()[1]/2, 0);
         }
         m_pressedButtonL = null;
@@ -51,8 +52,9 @@ public class PlayerScript : MonoBehaviour
                 m_pressedButtonR = button;
             }
         }
-        //if(Vector3.Dot(bloom.transform.position,new Vector3(bloom.transform.position.x, bloom.transform.position.y, transform.position.z) <= 0.5f);
-        if(Mathf.Abs(90 - bloom.transform.eulerAngles.x) >= 10 | Mathf.Abs(90 - bloom.transform.eulerAngles.z) >= 10) //| bloom.transform.rotation.z)
+
+        if(Vector3.Dot(bloom.transform.position, player[0].transform.position) <= 110f)
+        //if(Mathf.Abs(90 - bloom.transform.eulerAngles.x) >= 20 | Mathf.Abs(90 - bloom.transform.eulerAngles.z) >= 20) //| bloom.transform.rotation.z)
         {
             Destroy(bloom.GetComponent<HingeJoint>());
             Debug.Log("gameOver");
