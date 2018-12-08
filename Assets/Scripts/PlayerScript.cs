@@ -10,6 +10,7 @@ public class PlayerScript : MonoBehaviour
 
     public List<GameObject> player = new List<GameObject>();
     public List<GameObject> bloom = new List<GameObject>();
+    public GameObject ex;
     private List<Joycon> m_joycons;
     private Joycon m_joycon1;
     private Joycon m_joycon2;
@@ -28,19 +29,12 @@ public class PlayerScript : MonoBehaviour
 
     private void Update()
     {
-
-        for (int i = 0; i < m_joycons.Count; i++)
-        {
-            Quaternion temp = new Quaternion(m_joycons[i].GetVector().x, -m_joycons[i].GetVector().z, m_joycons[i].GetVector().y, m_joycons[i].GetVector().w);
-            player[i].transform.rotation = temp;
-
-            player[i].transform.position += new Vector3(m_joycons[i].GetStick()[0] / 2, m_joycons[i].GetStick()[1] / 2, 0);
-        }
         m_pressedButtonL = null;
         m_pressedButtonR = null;
 
         if (m_joycons == null || m_joycons.Count <= 0) return;
 
+        //ボタン判定
         foreach (var button in m_buttons)
         {
             if (m_joycon1.GetButton(button))
@@ -53,14 +47,34 @@ public class PlayerScript : MonoBehaviour
             }
         }
 
+
+
+        //回転・移動とってるとこ
+        for (int i = 0; i < m_joycons.Count; i++)
+        {
+            if(player[i] == null) continue;
+
+            player[i].transform.rotation = m_joycons[i].GetVector();
+            
+            player[i].transform.position += new Vector3(m_joycons[i].GetStick()[0] / 2, m_joycons[i].GetStick()[1] / 2, 0);
+        }
+
         for (int i = 0; i < bloom.Count; i++)
         {
+            if(bloom[i] == null) continue;
+
             //if (Vector3.Dot(bloom[i].transform.position, player[i].transform.position) <= 110f)
             Debug.Log(Mathf.Abs(90-bloom[i].transform.localEulerAngles.x));
-            if(Mathf.Abs(90 - bloom[i].transform.localEulerAngles.x) >= 25) //| bloom.transform.rotation.z)
+            if(Mathf.Abs(90 - bloom[i].transform.localEulerAngles.x) >= 15) 
             {
                 Destroy(bloom[i].GetComponent<HingeJoint>());
-                Debug.Log("gameOver");
+            }
+
+            if(bloom[i].transform.position.z > 30){
+                Instantiate(ex, bloom[i].transform.position, bloom[i].transform.rotation);
+                m_joycons[i].SetRumble( 160, 320, 0.6f, 200 );
+                Destroy(bloom[i]);
+                Destroy(player[i]);
             }
         }
 
@@ -123,6 +137,6 @@ public class PlayerScript : MonoBehaviour
         //     GUILayout.EndVertical();
         // }
 
-        GUILayout.EndHorizontal();
+        // GUILayout.EndHorizontal();
     }
 }
