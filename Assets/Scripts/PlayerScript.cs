@@ -9,16 +9,18 @@ public class PlayerScript : MonoBehaviour
         Enum.GetValues(typeof(Joycon.Button)) as Joycon.Button[];
 
     public List<GameObject> player = new List<GameObject>();
+    public List<GameObject> bloom = new List<GameObject>();
+    public GameObject ex;
     private List<Joycon> m_joycons;
     private Joycon m_joycon1;
     private Joycon m_joycon2;
     private Joycon.Button? m_pressedButtonL; //null 許容型
     private Joycon.Button? m_pressedButtonR;
 
+
     private void Start()
     {
         m_joycons = JoyconManager.Instance.j;
-        print(m_joycons[1]);
         if (m_joycons == null || m_joycons.Count <= 0) return;
 
         m_joycon1 = m_joycons.Find(c => c.isLeft);
@@ -27,17 +29,12 @@ public class PlayerScript : MonoBehaviour
 
     private void Update()
     {
-
-        for (int i = 0; i < m_joycons.Count; i++)
-        {
-            player[i].transform.rotation = m_joycons[i].GetVector();
-            //player[i].transform.position +=  m_joycons[i].GetGyro();
-        }
         m_pressedButtonL = null;
         m_pressedButtonR = null;
 
         if (m_joycons == null || m_joycons.Count <= 0) return;
 
+        //ボタン判定
         foreach (var button in m_buttons)
         {
             if (m_joycon1.GetButton(button))
@@ -47,6 +44,37 @@ public class PlayerScript : MonoBehaviour
             if (m_joycon2.GetButton(button))
             {
                 m_pressedButtonR = button;
+            }
+        }
+
+
+
+        //回転・移動とってるとこ
+        for (int i = 0; i < m_joycons.Count; i++)
+        {
+            if(player[i] == null) continue;
+
+            player[i].transform.rotation = m_joycons[i].GetVector();
+            
+            player[i].transform.position += new Vector3(m_joycons[i].GetStick()[0] / 2, m_joycons[i].GetStick()[1] / 2, 0);
+        }
+
+        for (int i = 0; i < bloom.Count; i++)
+        {
+            if(bloom[i] == null) continue;
+
+            //if (Vector3.Dot(bloom[i].transform.position, player[i].transform.position) <= 110f)
+            Debug.Log(Mathf.Abs(90-bloom[i].transform.localEulerAngles.x));
+            if(Mathf.Abs(90 - bloom[i].transform.localEulerAngles.x) >= 15) 
+            {
+                Destroy(bloom[i].GetComponent<HingeJoint>());
+            }
+
+            if(bloom[i].transform.position.z > 30){
+                Instantiate(ex, bloom[i].transform.position, bloom[i].transform.rotation);
+                m_joycons[i].SetRumble( 160, 320, 0.6f, 200 );
+                Destroy(bloom[i]);
+                Destroy(player[i]);
             }
         }
 
@@ -87,28 +115,28 @@ public class PlayerScript : MonoBehaviour
 
         GUILayout.BeginHorizontal(GUILayout.Width(960));
 
-        foreach (var joycon in m_joycons)
-        {
-            var isLeft = joycon.isLeft;
-            var name = isLeft ? "Joy-Con (L)" : "Joy-Con (R)";
-            var key = isLeft ? "Z キー" : "X キー";
-            var button = isLeft ? m_pressedButtonL : m_pressedButtonR;
-            var stick = joycon.GetStick();
-            var gyro = joycon.GetGyro();
-            var accel = joycon.GetAccel();
-            var orientation = joycon.GetVector();
+        // foreach (var joycon in m_joycons)
+        // {
+        //     var isLeft = joycon.isLeft;
+        //     var name = isLeft ? "Joy-Con (L)" : "Joy-Con (R)";
+        //     var key = isLeft ? "Z キー" : "X キー";
+        //     var button = isLeft ? m_pressedButtonL : m_pressedButtonR;
+        //     var stick = joycon.GetStick();
+        //     var gyro = joycon.GetGyro();
+        //     var accel = joycon.GetAccel();
+        //     var orientation = joycon.GetVector();
 
-            GUILayout.BeginVertical(GUILayout.Width(480));
-            GUILayout.Label(name);
-            GUILayout.Label(key + "：振動");
-            GUILayout.Label("押されているボタン：" + button);
-            GUILayout.Label(string.Format("スティック：({0}, {1})", stick[0], stick[1]));
-            GUILayout.Label("ジャイロ：" + gyro);
-            GUILayout.Label("加速度：" + accel);
-            GUILayout.Label("傾き：" + orientation);
-            GUILayout.EndVertical();
-        }
+        //     GUILayout.BeginVertical(GUILayout.Width(480));
+        //     GUILayout.Label(name);
+        //     GUILayout.Label(key + "：振動");
+        //     GUILayout.Label("押されているボタン：" + button);
+        //     GUILayout.Label(string.Format("スティック：({0}, {1})", stick[0], stick[1]));
+        //     GUILayout.Label("ジャイロ：" + gyro);
+        //     GUILayout.Label("加速度：" + accel);
+        //     GUILayout.Label("傾き：" + orientation);
+        //     GUILayout.EndVertical();
+        // }
 
-        GUILayout.EndHorizontal();
+        // GUILayout.EndHorizontal();
     }
 }
