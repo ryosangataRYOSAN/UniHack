@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class mainManager : MonoBehaviour {
@@ -21,11 +22,18 @@ public class mainManager : MonoBehaviour {
 			startTrigger = true;
 			bloom.SetActive(true);
 		}
+		if(!startTrigger && Input.GetKey(KeyCode.R)){
+			string temp = SceneManager.GetActiveScene().name;
+			SceneManager.LoadScene(temp);	//落ちる　ゆうあい
+		}
 
 		if(startTrigger){
 			time += Time.deltaTime;
 			if(time > 60){
 				timeLabel.text = "おしまい！";
+				if(time > 67){
+					//ResultSceneへ
+				}
 			}else{
 				timeLabel.text = (60 - time).ToString("f1");
 			}

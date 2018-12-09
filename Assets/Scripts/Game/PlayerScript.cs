@@ -9,6 +9,7 @@ public class PlayerScript : MonoBehaviour
         Enum.GetValues(typeof(Joycon.Button)) as Joycon.Button[];
     public List<GameObject> player = new List<GameObject>();
     public List<GameObject> bloom = new List<GameObject>();
+    private bool[] finishTrigger = { false, false, false, false };
     public mainManager mm;
     public GameObject ex;
     private List<Joycon> m_joycons;
@@ -60,6 +61,36 @@ public class PlayerScript : MonoBehaviour
             {
                 player[i].transform.position += new Vector3(m_joycons[i].GetStick()[0] / 2, m_joycons[i].GetStick()[1] / 2, 0);
             }
+
+            if (finishTrigger[0])
+            {
+                if (m_joycons.Count == 1)
+                {
+                    //Resultへ
+                }
+                else if (finishTrigger[1])
+                {
+                    if (m_joycons.Count == 2)
+                    {
+                        //Resultへ
+
+                    }
+                    else if (finishTrigger[2])
+                    {
+                        if (m_joycons.Count == 3)
+                        {
+                            //Resultへ
+
+                        }
+                        else if (finishTrigger[3])
+                        {
+                            //Resultへ
+
+                        }
+
+                    }
+                }
+            }
         }
 
         for (int i = 0; i < bloom.Count; i++)
@@ -79,6 +110,7 @@ public class PlayerScript : MonoBehaviour
                 m_joycons[i].SetRumble(160, 320, 0.6f, 200);
                 Destroy(bloom[i]);
                 Destroy(player[i]);
+                finishTrigger[i] = true;
             }
         }
 
