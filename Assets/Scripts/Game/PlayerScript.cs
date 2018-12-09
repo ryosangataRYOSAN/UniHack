@@ -7,9 +7,9 @@ public class PlayerScript : MonoBehaviour
 {
     private static readonly Joycon.Button[] m_buttons =
         Enum.GetValues(typeof(Joycon.Button)) as Joycon.Button[];
-
     public List<GameObject> player = new List<GameObject>();
     public List<GameObject> bloom = new List<GameObject>();
+    public mainManager mm;
     public GameObject ex;
     private List<Joycon> m_joycons;
     private Joycon m_joycon1;
@@ -20,6 +20,7 @@ public class PlayerScript : MonoBehaviour
 
     private void Start()
     {
+        mm = this.GetComponent<mainManager>();
         m_joycons = JoyconManager.Instance.j;
         if (m_joycons == null || m_joycons.Count <= 0) return;
 
@@ -52,27 +53,30 @@ public class PlayerScript : MonoBehaviour
         //回転・移動とってるとこ
         for (int i = 0; i < m_joycons.Count; i++)
         {
-            if(player[i] == null) continue;
+            if (player[i] == null) continue;
 
             player[i].transform.rotation = m_joycons[i].GetVector();
-            
-            player[i].transform.position += new Vector3(m_joycons[i].GetStick()[0] / 2, m_joycons[i].GetStick()[1] / 2, 0);
+            if (mm.startTrigger)
+            {
+                player[i].transform.position += new Vector3(m_joycons[i].GetStick()[0] / 2, m_joycons[i].GetStick()[1] / 2, 0);
+            }
         }
 
         for (int i = 0; i < bloom.Count; i++)
         {
-            if(bloom[i] == null) continue;
+            if (bloom[i] == null) continue;
 
             //if (Vector3.Dot(bloom[i].transform.position, player[i].transform.position) <= 110f)
-            Debug.Log(Mathf.Abs(90-bloom[i].transform.localEulerAngles.x));
-            if(Mathf.Abs(90 - bloom[i].transform.localEulerAngles.x) >= 15) 
+            Debug.Log(Mathf.Abs(90 - bloom[i].transform.localEulerAngles.x));
+            if (Mathf.Abs(90 - bloom[i].transform.localEulerAngles.x) >= 15)
             {
                 Destroy(bloom[i].GetComponent<HingeJoint>());
             }
 
-            if(bloom[i].transform.position.z > 30){
+            if (bloom[i].transform.position.z > 30)
+            {
                 Instantiate(ex, bloom[i].transform.position, bloom[i].transform.rotation);
-                m_joycons[i].SetRumble( 160, 320, 0.6f, 200 );
+                m_joycons[i].SetRumble(160, 320, 0.6f, 200);
                 Destroy(bloom[i]);
                 Destroy(player[i]);
             }
