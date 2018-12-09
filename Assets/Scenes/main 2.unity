@@ -43341,7 +43341,6 @@ MonoBehaviour:
   - {fileID: 443768146}
   - {fileID: 450745837}
   mm: {fileID: 0}
-  resultScene: {fileID: 0}
   ex: {fileID: 1922785449653414, guid: 4f75ece73aa0446e5a0ffb6678162512, type: 2}
 --- !u!114 &1923135764
 MonoBehaviour:
@@ -43355,6 +43354,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startTrigger: 0
+  ps: {fileID: 1923135763}
   timeLabel: {fileID: 1846127245}
   time: 0
   bloom: {fileID: 542322592}
