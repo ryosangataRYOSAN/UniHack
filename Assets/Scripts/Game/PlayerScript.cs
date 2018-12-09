@@ -67,25 +67,26 @@ public class PlayerScript : MonoBehaviour
                 if (m_joycons.Count == 1)
                 {
                     //Resultへ
+                    mm.FinishGame();
                 }
                 else if (finishTrigger[1])
                 {
                     if (m_joycons.Count == 2)
                     {
                         //Resultへ
-
+                        mm.FinishGame();
                     }
                     else if (finishTrigger[2])
                     {
                         if (m_joycons.Count == 3)
                         {
                             //Resultへ
-
+                            mm.FinishGame();
                         }
                         else if (finishTrigger[3])
                         {
                             //Resultへ
-
+                            mm.FinishGame();
                         }
 
                     }
