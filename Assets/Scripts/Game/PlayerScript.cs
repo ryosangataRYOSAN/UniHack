@@ -103,8 +103,9 @@ public class PlayerScript : MonoBehaviour
         {
             if (bloom[i] == null) continue;
 
+            Debug.Log(Mathf.Abs(90 - bloom[i].transform.localEulerAngles.x));
             //if (Vector3.Dot(bloom[i].transform.position, player[i].transform.position) <= 110f)
-            if (Mathf.Abs(90 - bloom[i].transform.localEulerAngles.x) >= 15)
+            if (Mathf.Abs(90 - bloom[i].transform.localEulerAngles.x) <= 60)
             {
                 Destroy(bloom[i].GetComponent<HingeJoint>());
             }
@@ -112,7 +113,7 @@ public class PlayerScript : MonoBehaviour
             if (bloom[i].transform.position.z > 30)
             {
                 Instantiate(ex, bloom[i].transform.position, bloom[i].transform.rotation);
-                m_joycons[i].SetRumble(160, 320, 0.6f, 200);
+                //m_joycons[i].SetRumble(160, 320, 0.6f, 50);
                 int rank = player.Count - gameOverCount;
                 gameOverCount++;
                 var resultData = new ResultData(i+1, mm.time, rank);
