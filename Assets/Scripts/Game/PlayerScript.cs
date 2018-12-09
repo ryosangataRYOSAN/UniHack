@@ -9,6 +9,7 @@ public class PlayerScript : MonoBehaviour
         Enum.GetValues(typeof(Joycon.Button)) as Joycon.Button[];
     public List<GameObject> player = new List<GameObject>();
     public List<GameObject> bloom = new List<GameObject>();
+    public List<ResultData> resultArray = new List<ResultData>();
     private bool[] finishTrigger = { false, false, false, false };
     public mainManager mm;
     public GameObject ex;
@@ -18,10 +19,13 @@ public class PlayerScript : MonoBehaviour
     private Joycon.Button? m_pressedButtonL; //null 許容型
     private Joycon.Button? m_pressedButtonR;
 
+    int gameOverCount = 0;
+
 
     private void Start()
     {
         mm = this.GetComponent<mainManager>();
+
         m_joycons = JoyconManager.Instance.j;
         if (m_joycons == null || m_joycons.Count <= 0) return;
 
@@ -61,46 +65,47 @@ public class PlayerScript : MonoBehaviour
             {
                 player[i].transform.position += new Vector3(m_joycons[i].GetStick()[0] / 2, m_joycons[i].GetStick()[1] / 2, 0);
             }
+        }
 
-            if (finishTrigger[0])
+        if (finishTrigger[0])
+        {
+            if (m_joycons.Count == 1)
             {
-                if (m_joycons.Count == 1)
+                //Resultへ
+                mm.FinishGame();
+            }
+            else if (finishTrigger[1])
+            {
+                if (m_joycons.Count == 2)
                 {
                     //Resultへ
                     mm.FinishGame();
                 }
-                else if (finishTrigger[1])
+                else if (finishTrigger[2])
                 {
-                    if (m_joycons.Count == 2)
+                    if (m_joycons.Count == 3)
                     {
                         //Resultへ
                         mm.FinishGame();
                     }
-                    else if (finishTrigger[2])
+                    else if (finishTrigger[3])
                     {
-                        if (m_joycons.Count == 3)
-                        {
-                            //Resultへ
-                            mm.FinishGame();
-                        }
-                        else if (finishTrigger[3])
-                        {
-                            //Resultへ
-                            mm.FinishGame();
-                        }
-
+                        //Resultへ
+                        mm.FinishGame();
                     }
+
                 }
             }
         }
+
 
         for (int i = 0; i < bloom.Count; i++)
         {
             if (bloom[i] == null) continue;
 
-            //if (Vector3.Dot(bloom[i].transform.position, player[i].transform.position) <= 110f)
             Debug.Log(Mathf.Abs(90 - bloom[i].transform.localEulerAngles.x));
-            if (Mathf.Abs(90 - bloom[i].transform.localEulerAngles.x) >= 15)
+            //if (Vector3.Dot(bloom[i].transform.position, player[i].transform.position) <= 110f)
+            if (Mathf.Abs(90 - bloom[i].transform.localEulerAngles.x) <= 60)
             {
                 Destroy(bloom[i].GetComponent<HingeJoint>());
             }
@@ -108,7 +113,11 @@ public class PlayerScript : MonoBehaviour
             if (bloom[i].transform.position.z > 30)
             {
                 Instantiate(ex, bloom[i].transform.position, bloom[i].transform.rotation);
-                m_joycons[i].SetRumble(160, 320, 0.6f, 200);
+                //m_joycons[i].SetRumble(160, 320, 0.6f, 50);
+                int rank = player.Count - gameOverCount;
+                gameOverCount++;
+                var resultData = new ResultData(i+1, mm.time, rank);
+                resultArray.Add(resultData);
                 Destroy(bloom[i]);
                 Destroy(player[i]);
                 finishTrigger[i] = true;
@@ -125,6 +134,17 @@ public class PlayerScript : MonoBehaviour
         //     m_joycon2.SetRumble( 160, 320, 0.6f, 200 );
         // }
 
+    }
+
+    public void Score()
+    {
+        for (int i = player.Count; i >= 0; i--)
+        {
+            if(player[i-1] != null){
+                var resultData = new ResultData(i, 60, 1);
+                resultArray.Add(resultData);
+            }
+        }
     }
 
     private void OnGUI()
