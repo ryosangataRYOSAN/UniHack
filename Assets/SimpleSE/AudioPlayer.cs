@@ -8,6 +8,8 @@ public static class SEType{
 	public static readonly string Click = "click";
 	public static readonly string Attack1 = "attack1";
 	public static readonly string Attack2 = "attack2";
+	public static readonly string Cheer1 = "cheer";
+	public static readonly string Cheer2 = "cheer2";
 }
 
 

@@ -7,15 +7,19 @@ public class ResultRankItem : MonoBehaviour
 {
 
     [SerializeField]
-    Text text;
+    Text player;
+    [SerializeField]
+    Text score;
 
     private void Reset()
     {
-        text = this.GetComponentInChildren<Text>(true);
+        player = this.GetComponentInChildren<Text>(true);
+        score = this.GetComponentInChildren<Text>(true);
     }
 
     public void UpdateRankText(ResultData resultData)
     {
-        text.text = resultData.Rank.ToString() + "位 : Player " + resultData.PlayerID.ToString() + " Score : " + resultData.Score.ToString();
+        player.text = "プレイヤー " + resultData.PlayerID.ToString();
+        score.text = "Score : " + resultData.Score.ToString();
     }
 }
