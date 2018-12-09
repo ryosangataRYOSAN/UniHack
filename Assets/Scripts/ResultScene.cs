@@ -27,11 +27,10 @@ public class ResultScene : MonoBehaviour
     [SerializeField]
     ResultRankListView resultRankListView;
 
-    bool flag;
-
     private void Awake()
     {
-        SceneLoader.CurrentOptions = new Options(ResultData.CreateTestModels());
+        if(SceneLoader.CurrentOptions == null)
+            SceneLoader.CurrentOptions = new Options(ResultData.CreateTestModels());
     }
 
     // Use this for initialization
@@ -43,7 +42,7 @@ public class ResultScene : MonoBehaviour
         {
             Debug.LogError("Score result is null");
         }
-        flag = true;
+        
         Debug.Log(options.Results.Count);
 
         resultDatas = options.Results.OrderBy(value => value.Rank).ToList(); ;
@@ -57,10 +56,10 @@ public class ResultScene : MonoBehaviour
     {
 
 
-        if (Input.GetKeyDown(KeyCode.Return) && flag)
+        if (Input.GetKeyDown(KeyCode.Return))
         {
+            AudioPlayer.PlaySE(SEType.Attack1);
             SceneLoader.LoadSceneAsync("Title");
-            flag = false;
         }
     }
 }
