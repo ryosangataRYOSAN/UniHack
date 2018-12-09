@@ -2,31 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TitleScene : MonoBehaviour
-{
-
-    bool flag;
-
-    // Use this for initialization
-    void Awake()
-    {
-
-
-    }
+public class TitleScene : MonoBehaviour {
 
     // Update is called once per frame
-    void Update()
-    {
-
-
-        if (Input.GetKeyDown(KeyCode.Return) && flag)
-        {
-            SceneLoader.LoadSceneAsync("Main");
-            flag = false;
+    void Update () {
+        if (Input.GetKeyDown (KeyCode.Return)) {
+            AudioPlayer.PlaySE (SEType.Attack1);
+            SceneLoader.LoadSceneAsync ("playerSelect");
         }
     }
-
-
-
-
 }
